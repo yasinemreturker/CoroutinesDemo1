@@ -4,9 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
     private var count = 0
@@ -28,9 +26,18 @@ class MainActivity : AppCompatActivity() {
         }*/
     }
 
-    private fun downloadUserData() {
-        for (i in 1..200000) {
-            Log.i("MyTag", "Downloading user $i in ${Thread.currentThread().name}")
+    private suspend fun downloadUserData() {
+
+        // If you visible this code, you can see thread names in log.
+        //Log.i("MyTag", "Downloading user $i in ${Thread.currentThread().name}")
+
+        //If you visible this code, you can see thread names on ui.
+        withContext(Dispatchers.Main) {
+            for (i in 1..200000) {
+                tvUserMessage.text = "Downloading user $i in ${Thread.currentThread().name}"
+                delay(100)
+            }
         }
+
     }
 }
